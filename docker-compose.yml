@@ -1,0 +1,18 @@
+version: "3.1"
+services:
+  # Definindo as configuraçõe do banco de dados.
+  db:
+    # Definindo o driver
+    image: mysql
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      # Porta externa e interna ao container.
+      - "3306:3306"
+    volumes:
+      - anime_data:/var/lib/mysql
+volumes:
+  anime_data:
+# Comandos para operar no docker
+# docker ps -a: 'ps' para listar e '-a' (all) ara listar todos

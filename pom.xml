@@ -20,17 +20,22 @@
 	</properties>
 
 	<dependencies>
+		<!-- Dependência padrão do spring para web -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- Ferramentas de desenvolvimento do spring
+			1. HotSwap: ajuda na velocidade do boot; -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+
+		<!-- Ajuda na abstração atividades cotidianas no desenvolvimento: Get/Set, Construtores e etc; -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>

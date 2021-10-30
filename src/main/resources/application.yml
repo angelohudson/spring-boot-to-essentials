@@ -1,0 +1,5 @@
+server:
+    error:
+        # Essa propriedade define se o usuário verá o stacktracer caso haja um estouro de exceção
+        # Caso queira ver o stacktrace adcione o ?trace=true na consulta;
+        include-stacktrace: on-param
