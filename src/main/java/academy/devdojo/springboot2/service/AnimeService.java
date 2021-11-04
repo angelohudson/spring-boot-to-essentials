@@ -1,11 +1,15 @@
 package academy.devdojo.springboot2.service;
 
 import java.util.List;
+
+import javax.transaction.Transactional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import academy.devdojo.springboot2.domain.Anime;
+import academy.devdojo.springboot2.exception.BadRequestException;
 import academy.devdojo.springboot2.mapper.AnimeMapper;
 import academy.devdojo.springboot2.repository.AnimeRepository;
 import academy.devdojo.springboot2.requests.AnimePostRequestBody;
@@ -32,9 +36,14 @@ public class AnimeService {
                  * Desta forma podemos "vazar" a exceção deixando a resposta mais completa ao
                  * cliente
                  */
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Anime not found"));
+                .orElseThrow(() -> new BadRequestException("Anime not found"));
     }
 
+    /** A anotação @Transactional só permite que as transações sejam finalizadas quando o método for finalizado.
+     * No caso se houver um erro o Spring faz um rollback nas transações.
+     * Obs: apenas se o banco oferece suporte a transação.
+     */
+    @Transactional
     public Anime save(AnimePostRequestBody animeBody) {
         Anime anime = AnimeMapper.INSTANCE.toAnime(animeBody);
         return this.repository.save(anime);
@@ -49,5 +58,9 @@ public class AnimeService {
         Anime anime = AnimeMapper.INSTANCE.toAnime(animeBody);
         anime.setId(animeBody.getId());
         this.repository.save(anime);
+    }
+
+    public List<Anime> findByName(String name) {
+        return this.repository.findByName(name);
     }
 }

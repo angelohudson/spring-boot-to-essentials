@@ -16,10 +16,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
@@ -38,6 +42,11 @@ public class AnimeController {
         return ResponseEntity.ok(animeService.listAll());
     }
 
+    @GetMapping("find")
+    public ResponseEntity<List<Anime>> findByName(@RequestParam(name = "name") String name) {
+        return ResponseEntity.ok(animeService.findByName(name));
+    }
+
     @GetMapping(path = "/{id}")
     public ResponseEntity<Anime> findById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(this.animeService.findByIdOrThrowBadRequestException(id));
@@ -47,8 +56,11 @@ public class AnimeController {
      * Para posts o retorno varia de acordo com o projeto. Nesse caso retornaremos o
      * objeto inserido inteiro. O código é 201 (criado)
      */
+    /**
+     * @Valid retorna error caso algum critério anotado no dto não seja preenchido
+     */
     @PostMapping
-    public ResponseEntity<Anime> save(@RequestBody AnimePostRequestBody animeBody) {
+    public ResponseEntity<Anime> save(@RequestBody @Valid AnimePostRequestBody animeBody) {
         return new ResponseEntity<Anime>(this.animeService.save(animeBody), HttpStatus.CREATED);
     }
 

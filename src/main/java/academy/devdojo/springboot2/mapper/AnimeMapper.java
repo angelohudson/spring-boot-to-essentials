@@ -7,13 +7,13 @@ import academy.devdojo.springboot2.domain.Anime;
 import academy.devdojo.springboot2.requests.AnimePostRequestBody;
 import academy.devdojo.springboot2.requests.AnimePutRequestBody;
 
-@Mapper(componentModel = "spring")
-public abstract class AnimeMapper {
+@Mapper
+public interface AnimeMapper {
 
-    public static final AnimeMapper INSTANCE = Mappers.getMapper(AnimeMapper.class);
+    AnimeMapper INSTANCE = Mappers.getMapper(AnimeMapper.class);
 
-    public abstract Anime toAnime(AnimePostRequestBody animeBody);
+    public Anime toAnime(AnimePostRequestBody animeBody);
 
-    public abstract Anime toAnime(AnimePutRequestBody animeBody);
+    public Anime toAnime(AnimePutRequestBody animeBody);
 
 }
