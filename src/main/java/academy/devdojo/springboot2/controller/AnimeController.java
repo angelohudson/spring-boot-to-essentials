@@ -8,6 +8,8 @@ import academy.devdojo.springboot2.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import javax.validation.Valid;
 
@@ -36,15 +37,17 @@ public class AnimeController {
     private final AnimeService animeService;
     private final DateUtil dateUtil;
 
+    /** Page (pacote springframework.data.domain) é o padrão do spring para paginação. */
+    /** Pageable (pacote springframework.data.domain) captura os dados de paginação da request. Por exemplo os parametros size, sort e page */
     @GetMapping
-    public ResponseEntity<List<Anime>> list() {
+    public ResponseEntity<Page<Anime>> list(Pageable pageable) {
         log.info(this.dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
-        return ResponseEntity.ok(animeService.listAll());
+        return ResponseEntity.ok(animeService.listAll(pageable));
     }
 
     @GetMapping("find")
-    public ResponseEntity<List<Anime>> findByName(@RequestParam(name = "name") String name) {
-        return ResponseEntity.ok(animeService.findByName(name));
+    public ResponseEntity<Page<Anime>> findByName(@RequestParam(name = "name") String name, Pageable pageable) {
+        return ResponseEntity.ok(animeService.findByName(name, pageable));
     }
 
     @GetMapping(path = "/{id}")

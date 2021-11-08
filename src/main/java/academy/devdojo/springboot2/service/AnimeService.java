@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,8 +28,8 @@ public class AnimeService {
 
     private final AnimeRepository repository;
 
-    public List<Anime> listAll() {
-        return this.repository.findAll();
+    public Page<Anime> listAll(Pageable pageable) {
+        return this.repository.findAll(pageable);
     }
 
     public Anime findByIdOrThrowBadRequestException(Long id) {
@@ -60,7 +62,7 @@ public class AnimeService {
         this.repository.save(anime);
     }
 
-    public List<Anime> findByName(String name) {
-        return this.repository.findByName(name);
+    public Page<Anime> findByName(String name, Pageable pageable) {
+        return this.repository.findByName(name, pageable);
     }
 }
