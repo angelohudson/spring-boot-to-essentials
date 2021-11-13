@@ -60,6 +60,14 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!-- Banco em memória para testes de banco -->
+		<!-- Dica: aprende teste se não ta ferrado... :| -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- Ajuda na abstração atividades cotidianas no desenvolvimento: Get/Set, Construtores e etc; -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
