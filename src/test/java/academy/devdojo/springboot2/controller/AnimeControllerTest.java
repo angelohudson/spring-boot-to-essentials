@@ -11,7 +11,6 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -49,6 +48,10 @@ public class AnimeControllerTest {
          * da classe AnimeService ser instanciada
          */
         BDDMockito.when(this.service.listAll(ArgumentMatchers.any())).thenReturn(anime);
+        BDDMockito.when(this.service.findByName(ArgumentMatchers.anyString(), ArgumentMatchers.any()))
+                .thenReturn(anime);
+        BDDMockito.when(this.service.findByIdOrThrowBadRequestException(ArgumentMatchers.anyLong()))
+                .thenReturn(AnimeCreator.createToSaved());
     }
 
     @Test
@@ -59,6 +62,25 @@ public class AnimeControllerTest {
         Assertions.assertThat(list).isNotNull();
         Assertions.assertThat(list.toList()).isNotEmpty().hasSize(1);
         Assertions.assertThat(list.toList().get(0).getName()).isEqualTo(expectedName);
+    }
+
+    @Test
+    @DisplayName("List returns list of animes when successful")
+    public void findByName_ReturnsListOfAnimes_WhenSuccessful() {
+        String expectedName = AnimeCreator.createToSaved().getName();
+        Page<Anime> list = animeController.findByName(expectedName, null).getBody();
+        Assertions.assertThat(list).isNotNull();
+        Assertions.assertThat(list.toList()).isNotEmpty().hasSize(1);
+        Assertions.assertThat(list.toList().get(0).getName()).isEqualTo(expectedName);
+    }
+
+    @Test
+    @DisplayName("List returns anime when successful")
+    public void findById_ReturnsAnime_WhenSuccessful() {
+        Long expectedId = AnimeCreator.createToSaved().getId();
+        Anime anime = animeController.findById(expectedId).getBody();
+        Assertions.assertThat(anime).isNotNull();
+        Assertions.assertThat(anime.getId()).isEqualTo(expectedId);
     }
 
 }
