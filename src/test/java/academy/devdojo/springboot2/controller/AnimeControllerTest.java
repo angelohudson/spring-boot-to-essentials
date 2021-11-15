@@ -22,7 +22,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import academy.devdojo.springboot2.domain.Anime;
 import academy.devdojo.springboot2.exception.BadRequestException;
-import academy.devdojo.springboot2.util.AnimeMapper;
+import academy.devdojo.springboot2.util.AnimeUtil;
 import academy.devdojo.springboot2.requests.AnimePostRequestBody;
 import academy.devdojo.springboot2.requests.AnimePutRequestBody;
 import academy.devdojo.springboot2.service.AnimeService;
@@ -119,7 +119,7 @@ public class AnimeControllerTest {
     @Test
     @DisplayName("Save returns new anime persisted when successful")
     public void save_ReturnsNewAnimePersisted_WhenSuccessful() {
-        Anime anime = animeController.save(AnimeMapper.postBodyfromAnime()).getBody();
+        Anime anime = animeController.save(AnimeUtil.postBodyfromValidAnime()).getBody();
         Assertions.assertThat(anime).isNotNull().isEqualTo(AnimeCreator.createValidAnime());
     }
 
@@ -130,9 +130,9 @@ public class AnimeControllerTest {
          * No caso em que o método não retorna nada podemos validar o http response
          * status se irá estoruar alguma exceção
          */
-        Assertions.assertThatCode(() -> animeController.replace(AnimeMapper.putBodyfromAnime()))
+        Assertions.assertThatCode(() -> animeController.replace(AnimeUtil.putBodyfromValidAnime()))
                 .doesNotThrowAnyException();
-        ResponseEntity<Void> entity = animeController.replace(AnimeMapper.putBodyfromAnime());
+        ResponseEntity<Void> entity = animeController.replace(AnimeUtil.putBodyfromValidAnime());
         Assertions.assertThat(entity).isNotNull();
         Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
@@ -142,16 +142,16 @@ public class AnimeControllerTest {
     public void replace_ReturnsBadRequestException_WhenAnimeNotFound() {
         BadRequestException expected = new BadRequestException("Anime not found");
         BDDMockito.doThrow(expected).when(this.service).replace(ArgumentMatchers.any(AnimePutRequestBody.class));
-        Exception thrown = assertThrows(Exception.class, () -> animeController.replace(AnimeMapper.putBodyfromAnime()));
+        Exception thrown = assertThrows(Exception.class, () -> animeController.replace(AnimeUtil.putBodyfromValidAnime()));
         Assertions.assertThat(thrown.getMessage()).isEqualTo("Anime not found");
         Assertions.assertThat(thrown.getClass()).isEqualTo(BadRequestException.class);
     }
 
     @Test
-    @DisplayName("replace returns no content when successful")
+    @DisplayName("delete returns no content when successful")
     public void delete_ReturnsNoContent_WhenSuccessful() {
         Assertions.assertThatCode(() -> animeController.delete(1l)).doesNotThrowAnyException();
-        ResponseEntity<Void> entity = animeController.replace(AnimeMapper.putBodyfromAnime());
+        ResponseEntity<Void> entity = animeController.delete(1l);
         Assertions.assertThat(entity).isNotNull();
         Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }

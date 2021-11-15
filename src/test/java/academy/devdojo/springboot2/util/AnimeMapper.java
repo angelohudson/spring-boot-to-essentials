@@ -16,11 +16,4 @@ public interface AnimeMapper {
 
     public AnimePutRequestBody putBodyfromAnime(Anime anime);
 
-    public static AnimePostRequestBody postBodyfromAnime() {
-        return INSTANCE.postBodyfromAnime(AnimeCreator.createValidAnime());
-    }
-
-    public static AnimePutRequestBody putBodyfromAnime() {
-        return INSTANCE.putBodyfromAnime(AnimeCreator.createValidUpdatedAnime());
-    }
 }
