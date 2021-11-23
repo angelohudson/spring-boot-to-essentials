@@ -31,6 +31,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                  * requisições GET.
                  */
                 .csrf().disable().authorizeRequests()
+                // Atravéz do antMatchers podemos definir o nível de acesso de cada tipo de usuário;
+                // É importante que a ordem seja do mais restrito ao menos.
+                .antMatchers("/anime/admin/**").hasRole("ADMIN")
+                .antMatchers("/anime/**").hasRole("USER")
                 // Para qualquer requisição
                 .anyRequest()
                 // esteja autenticada
