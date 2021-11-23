@@ -12,6 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,8 +40,14 @@ public class AnimeController {
     private final AnimeService animeService;
     private final DateUtil dateUtil;
 
-    /** Page (pacote springframework.data.domain) é o padrão do spring para paginação. */
-    /** Pageable (pacote springframework.data.domain) captura os dados de paginação da request. Por exemplo os parametros size, sort e page */
+    /**
+     * Page (pacote springframework.data.domain) é o padrão do spring para
+     * paginação.
+     */
+    /**
+     * Pageable (pacote springframework.data.domain) captura os dados de paginação
+     * da request. Por exemplo os parametros size, sort e page
+     */
     @GetMapping
     public ResponseEntity<Page<Anime>> list(Pageable pageable) {
         log.info(this.dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
@@ -55,6 +64,12 @@ public class AnimeController {
         return ResponseEntity.ok(this.animeService.findByIdOrThrowBadRequestException(id));
     }
 
+    /** @AuthenticationPrincipal instancia os dados do usuário logado */
+    @GetMapping(path = "/user/{id}")
+    public ResponseEntity<Anime> findById(@PathVariable("id") Long id, @AuthenticationPrincipal UserDetails user) {
+        return ResponseEntity.ok(this.animeService.findByIdOrThrowBadRequestException(id));
+    }
+
     /**
      * Para posts o retorno varia de acordo com o projeto. Nesse caso retornaremos o
      * objeto inserido inteiro. O código é 201 (criado)
@@ -63,6 +78,8 @@ public class AnimeController {
      * @Valid retorna error caso algum critério anotado no dto não seja preenchido
      */
     @PostMapping
+    /** Verifica se o usuário logado tem o acesso ADMIN, se não retorna 403 */
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Anime> save(@RequestBody @Valid AnimePostRequestBody animeBody) {
         return new ResponseEntity<Anime>(this.animeService.save(animeBody), HttpStatus.CREATED);
     }
