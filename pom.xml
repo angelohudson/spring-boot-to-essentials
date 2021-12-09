@@ -74,6 +74,25 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Documentação da API -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.5.13</version>
+		</dependency>
+		<!-- Oculta os detalhes de paginação na requisição -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-data-rest</artifactId>
+			<version>1.5.13</version>
+		</dependency>
+		<!-- Oculta os detalhes de usuário -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-security</artifactId>
+			<version>1.5.13</version>
+		</dependency>
+
 		<!-- Ajuda na abstração atividades cotidianas no desenvolvimento: Get/Set, Construtores e etc; -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
