@@ -5,6 +5,9 @@ import academy.devdojo.springboot2.requests.AnimePostRequestBody;
 import academy.devdojo.springboot2.requests.AnimePutRequestBody;
 import academy.devdojo.springboot2.service.AnimeService;
 import academy.devdojo.springboot2.util.DateUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -50,7 +53,9 @@ public class AnimeController {
      * da request. Por exemplo os parametros size, sort e page
      */
     @GetMapping
-    public ResponseEntity<Page<Anime>> list(@ParameterObject Pageable pageable) {
+    /** Descrição do endpoint para o poenApi */
+    @Operation(summary = "List all animes paginated", description = "The default size is 20. Use parameter size to change.", tags = {"anime"})
+    public ResponseEntity<Page<Anime>> list(/** Define os parametros certos no swagger */@ParameterObject Pageable pageable) {
         log.info(this.dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
         return ResponseEntity.ok(animeService.listAll(pageable));
     }
@@ -91,6 +96,10 @@ public class AnimeController {
      * Por exemplo, ao deletar um registro, qualquer retorno posterior deve retornar
      * um 404.
      */
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Sucessful Operation"),
+        @ApiResponse(responseCode = "400", description = "Anime not exists"),
+    })
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         this.animeService.delete(id);

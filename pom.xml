@@ -27,6 +27,13 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
+		<!-- Sistema de monitoramento -->
+		<!-- Acesse localhost:8080/actuator para visualizar -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 		<!-- Essa dependência irá facilitar a geração de DTOs necessários na aplicação web -->
 		<dependency>
 			<groupId>org.mapstruct</groupId>

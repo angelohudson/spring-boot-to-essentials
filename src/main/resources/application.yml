@@ -19,3 +19,13 @@ logging:
         org:
             hibernate:
                 SQL: debug
+
+# Liberando os módolos de métrica
+management:
+    endpoints:
+        web:
+            exposure:
+                include: "*"
+
+info:
+    app: Spring boot template project

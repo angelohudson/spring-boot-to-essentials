@@ -35,6 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // É importante que a ordem seja do mais restrito ao menos.
                 .antMatchers("/anime/admin/**").hasRole("ADMIN")
                 .antMatchers("/anime/**").hasRole("USER")
+                .antMatchers("/actuator/**").permitAll()
                 // Para qualquer requisição
                 .anyRequest()
                 // esteja autenticada
